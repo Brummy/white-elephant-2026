@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#102a2a">
+<title>White Elephant 2026 | Check Your Number</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;width:100%}
+body{min-height:100vh;min-height:100dvh;background:#102a2a;display:grid;place-items:center;overflow-x:hidden}
+/* Full-bleed animated winter forest: keeps its aspect ratio while filling the phone. */
+.scene{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.scene img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
+.scene::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,18,24,.14),rgba(0,20,24,.28) 45%,rgba(0,18,24,.37))}
+main{width:min(90vw,420px);margin:24px auto;padding:clamp(22px,5vw,32px) clamp(20px,5vw,30px);border-radius:25px;text-align:center;background:rgba(6,31,35,.68);border:1px solid rgba(255,255,255,.48);box-shadow:0 15px 60px rgba(0,0,0,.42);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.kicker{font-size:29px;line-height:1.2}
+h1{font-size:clamp(27px,7vw,40px);line-height:1.07;margin:12px 0;color:#fff1c4;text-shadow:0 2px 12px #0008;letter-spacing:.025em}
+p{margin:12px 0;color:#f4f7f4;line-height:1.45}
+label{display:block;font-weight:750;margin:23px 0 11px}
+input{display:block;width:170px;max-width:100%;margin:auto;text-align:center;font-size:38px;font-weight:800;border:3px solid #f3d88f;border-radius:13px;padding:10px;background:#fff;color:#133333;color-scheme:light}
+button{display:block;width:100%;margin-top:20px;padding:17px 10px;border:0;border-radius:13px;background:#f5d68b;color:#173832;font-size:19px;font-weight:850;cursor:pointer;touch-action:manipulation}
+button:hover{background:#ffe6a8}button:focus-visible,input:focus-visible{outline:3px solid white;outline-offset:3px}
+#result{min-height:74px;margin-top:18px;display:grid;place-items:center}
+#result strong{font-size:clamp(30px,9vw,48px);line-height:1.15;text-shadow:0 2px 12px #000a}
+.win{color:#ffe69c}.lose{color:#ffcbcb}.error{color:#ffe4bb;font-size:21px!important}
+.small{font-size:13px;margin-top:8px;opacity:.9}
+@media(min-width:700px){.scene img{object-position:center 45%}}
+@media(max-height:650px){main{margin:12px auto;padding:16px 20px}.kicker{font-size:22px}h1{font-size:27px;margin:7px 0}label{margin:12px 0 7px}input{font-size:29px;padding:5px}button{margin-top:12px;padding:12px}#result{min-height:42px;margin-top:8px}}
+@media(prefers-reduced-motion:no-preference){.win{animation:pop .5s ease-out}@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}}
+@media(prefers-reduced-motion:reduce){.scene img{visibility:hidden}.scene{background:#153c42}}
+</style>
+</head>
+<body>
+<div class="scene" aria-hidden="true"><img src="elephant-forest.gif" alt=""></div>
+<main>
+<div class="kicker" aria-hidden="true">🐘 🎄</div>
+<h1>WHITE ELEPHANT<br>2026</h1>
+<p>Three lucky numbers.<br>Is yours one of them?</p>
+<form id="checker">
+<label for="number">Enter your number (1–54)</label>
+<input id="number" type="number" min="1" max="54" step="1" inputmode="numeric" required autocomplete="off">
+<button type="submit">CHECK MY NUMBER</button>
+</form>
+<div id="result" role="status" aria-live="polite"></div>
+<p class="small">Good luck! 🎁</p>
+</main>
+<script src="winners.js"></script>
+<script>
+const form=document.getElementById('checker');
+const result=document.getElementById('result');
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  const raw=document.getElementById('number').value.trim(),n=Number(raw);
+  result.replaceChildren();
+  const msg=document.createElement('strong');
+  if(!/^\d+$/.test(raw)||!Number.isInteger(n)||n<1||n>54){
+    msg.className='error';msg.textContent='Enter a number from 1 to 54.';
+  }else if(!Array.isArray(window.WINNING_NUMBERS)||window.WINNING_NUMBERS.length!==3||new Set(window.WINNING_NUMBERS).size!==3||window.WINNING_NUMBERS.some(x=>!Number.isInteger(x)||x<1||x>54)){
+    msg.className='error';msg.textContent='Results are not ready yet.';
+  }else if(window.WINNING_NUMBERS.includes(n)){
+    msg.className='win';msg.textContent='🎉 WINNER! 🎉';
+  }else{
+    msg.className='lose';msg.textContent='LOSER! 🐘';
+  }
+  result.append(msg);
+});
+</script>
+</body>
+</html>
